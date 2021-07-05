@@ -21,3 +21,12 @@ module "network" {
   rg = azurerm_resource_group.elk_rg.name
   location = azurerm_resource_group.elk_rg.location
 }
+
+module "mgmt" {
+  source = "./modules/mgmt"
+  rg = azurerm_resource_group.elk_rg.name
+  location = azurerm_resource_group.elk_rg.location
+  subnet = module.network.elk_subnets[0]
+  password = var.password
+  username = var.username
+}
