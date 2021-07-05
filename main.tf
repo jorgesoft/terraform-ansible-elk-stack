@@ -10,3 +10,14 @@ terraform {
 provider "azurerm" {
   features {}
 }
+
+resource "azurerm_resource_group" "elk_rg" {
+  name     = "elk_rg"
+  location = "West US 2"
+}
+
+module "network" {
+  source = "./modules/network"
+  rg = azurerm_resource_group.elk_rg.name
+  location = azurerm_resource_group.elk_rg.location
+}
