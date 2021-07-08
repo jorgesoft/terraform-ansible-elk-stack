@@ -1,0 +1,1 @@
+ansible-playbook elastic.yml -i hosts -k -u "jorges" --private-key "master.key"
