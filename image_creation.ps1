@@ -6,7 +6,7 @@ $vnetName = "tmp_net"
 $subnetName = "tmp_subnet"
 $nsgName = "nsg"
 
-#create images RG
+#creat images tmp RG
 New-AzResourceGroup -Name $rg -Location $location
 
 #list of gold images to create
@@ -55,3 +55,43 @@ foreach($image in $images){
 Move-Item -Path "hosts" -Destination "ansible/hosts"
 
 #ansible-playbook ./ansible/elastic.yml -i hosts -k -u "jorges"
+
+#image gallery rg variables
+$gallery_rg = "elk_gallery"
+
+#creat image gallery RG
+New-AzResourceGroup -Name $gallery_rg -Location $location
+
+$gallery = New-AzGallery `
+   -GalleryName 'elk_gallery' `
+   -ResourceGroupName $gallery_rg `
+   -Location $location `
+   -Description 'Shared Image Gallery for ELK Stack'
+
+#loop for image creation
+foreach($image in $images){
+    $galleryImage = New-AzGalleryImageDefinition `
+        -GalleryName $gallery.Name `
+        -ResourceGroupName $gallery_rg `
+        -Location $location `
+        -Name $image `
+        -OsState specialized `
+        -OsType Linux `
+        -Publisher 'gorj3' `
+        -Offer $image `
+        -Sku $
+        
+    $region1 = @{Name='South Central US';ReplicaCount=1}
+    $region2 = @{Name='East US';ReplicaCount=2}
+    $targetRegions = @($region1,$region2)
+     
+     New-AzGalleryImageVersion `
+        -GalleryImageDefinitionName $galleryImage.Name`
+        -GalleryImageVersionName '1.0.0' `
+        -GalleryName $gallery.Name `
+        -ResourceGroupName $resourceGroup.ResourceGroupName `
+        -Location $resourceGroup.Location `
+        -TargetRegion $targetRegions  `
+        -Source $sourceVM.Id.ToString() `
+        -PublishingProfileEndOfLifeDate '2020-12-01'
+}
