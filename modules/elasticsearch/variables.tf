@@ -27,3 +27,9 @@ variable "password" {
   type        = string
   sensitive   = true
 }
+
+variable "vm_names" {
+  description = "name of VMs for ES"
+  type        = list(string)
+  default     = ["elasticmaster", "elasticnode1", "elasticnode2"]
+}
