@@ -30,3 +30,13 @@ module "mgmt" {
   password = var.password
   username = var.username
 }
+
+module "elasticsearch" {
+  source = "./modules/elasticsearch"
+  rg = azurerm_resource_group.elk_rg.name
+  location = azurerm_resource_group.elk_rg.location
+  subnet = module.network.elk_subnets[1]
+  password = var.password
+  username = var.username
+  vnet = module.network.elk_vnet_id
+}
