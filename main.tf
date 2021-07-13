@@ -2,7 +2,13 @@ terraform {
   required_providers {
     azurerm = {
       source = "hashicorp/azurerm"
-      version = ">= 2.26"
+      version = "=2.67.0"
+    }
+  }
+  backend "remote" {
+    organization = "jorgesoft"
+    workspaces {
+      name = "terrafor-ansible-elk-stack"
     }
   }
 }
