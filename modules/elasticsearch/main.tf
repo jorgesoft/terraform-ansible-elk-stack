@@ -11,10 +11,6 @@ provider "azurerm" {
   features {}
 }
 
-locals {
-  vms = ["elasticmaster", "elasticnode1", "elasticnode2"]
-}
-
 resource "azurerm_lb" "elastic_lb" {
   name                = "elastic_lb"
   location            = var.location

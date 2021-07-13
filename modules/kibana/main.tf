@@ -11,14 +11,11 @@ provider "azurerm" {
   features {}
 }
 
-locals {
-  vms = ["kibana1", "kibana2"]
-}
-
 resource "azurerm_public_ip" "kibana_ip" {
   name                = "kibanaIP"
   location            = var.location
   resource_group_name = var.rg
+  sku = "Standard"
   allocation_method   = "Static"
 }
 
@@ -30,7 +27,7 @@ resource "azurerm_lb" "kibana_lb" {
 
   frontend_ip_configuration {
     name      = "kbipconfig"
-    subnet_id = var.subnet
+    #subnet_id = var.subnet
     public_ip_address_id = azurerm_public_ip.kibana_ip.id
   }
 }
