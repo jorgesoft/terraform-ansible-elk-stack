@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     azurerm = {
-      source = "hashicorp/azurerm"
+      source  = "hashicorp/azurerm"
       version = "=2.67.0"
     }
   }
@@ -23,36 +23,36 @@ resource "azurerm_resource_group" "elk_rg" {
 }
 
 module "network" {
-  source = "./modules/network"
-  rg = azurerm_resource_group.elk_rg.name
+  source   = "./modules/network"
+  rg       = azurerm_resource_group.elk_rg.name
   location = azurerm_resource_group.elk_rg.location
 }
 
 module "mgmt" {
-  source = "./modules/mgmt"
-  rg = azurerm_resource_group.elk_rg.name
+  source   = "./modules/mgmt"
+  rg       = azurerm_resource_group.elk_rg.name
   location = azurerm_resource_group.elk_rg.location
-  subnet = module.network.elk_subnets[0]
+  subnet   = module.network.elk_subnets[0]
   password = var.password
   username = var.username
 }
 
 module "elasticsearch" {
-  source = "./modules/elasticsearch"
-  rg = azurerm_resource_group.elk_rg.name
+  source   = "./modules/elasticsearch"
+  rg       = azurerm_resource_group.elk_rg.name
   location = azurerm_resource_group.elk_rg.location
-  subnet = module.network.elk_subnets[1]
+  subnet   = module.network.elk_subnets[1]
   password = var.password
   username = var.username
-  vnet = module.network.elk_vnet_id
+  vnet     = module.network.elk_vnet_id
 }
 
 module "kibana" {
-  source = "./modules/kibana"
-  rg = azurerm_resource_group.elk_rg.name
+  source   = "./modules/kibana"
+  rg       = azurerm_resource_group.elk_rg.name
   location = azurerm_resource_group.elk_rg.location
-  subnet = module.network.elk_subnets[2]
+  subnet   = module.network.elk_subnets[2]
   password = var.password
   username = var.username
-  vnet = module.network.elk_vnet_id
+  vnet     = module.network.elk_vnet_id
 }
