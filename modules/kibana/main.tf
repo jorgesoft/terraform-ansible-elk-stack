@@ -31,7 +31,7 @@ resource "azurerm_lb" "kibana_lb" {
   frontend_ip_configuration {
     name      = "kbipconfig"
     subnet_id = var.subnet
-    public_ip_address_id = azurerm_public_ip.kibana_lb.id
+    public_ip_address_id = azurerm_public_ip.kibana_ip.id
   }
 }
 
@@ -44,7 +44,7 @@ resource "azurerm_lb_probe" "kibana_probe" {
 
 resource "azurerm_lb_rule" "kibanarule" {
   resource_group_name            = var.rg
-  loadbalancer_id                = azurerm_lb.elastic_lb.id
+  loadbalancer_id                = azurerm_lb.kibana_lb.id
   name                           = "kibanarule"
   protocol                       = "Tcp"
   frontend_port                  = 80
