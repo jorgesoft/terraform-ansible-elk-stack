@@ -1,6 +1,8 @@
 # Deploy ELK Stack on Azure with Terraform, Ansible, and GitHub Actions
 Terraform configuration to deploy infrastructure in Azure. Ansible configuration to provision ELK stack in the resources. Everything automated with GitHub Actions.
 
+![infra_diagram](public/infra_diagram.png)
+
 ## Terraform:
 Terraform deploys the following modules within a single resource group:
 
