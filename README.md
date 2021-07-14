@@ -53,11 +53,11 @@ TODO
 This configuration needs secrets to access Azure and Terraform Cloud
 
 For Azure: 
-1. Using Azure CLI, run this command to create a Service Principal, with contributor access to the subscription (change SUBSCRIPTION-ID)
+1. Using Azure CLI, run this command to create a Service Principal, with contributor access to a subscription (change SUBSCRIPTION-ID)
 
 `az ad sp create-for-rbac --name "GitHub" --sdk-auth --role="Contributor" --scopes="/subscriptions/SUBSCRIPTION-ID"`
 
-2. Save the output in a secret names `AZURE_CREDENTIALS`, going to the repository Settings > Secrets > Actions. The format needs to be the following:
+2. Save the output in a secret named `AZURE_CREDENTIALS`, going to the repository Settings > Secrets > Actions. The format needs to be the following:
 
 ```
   {"clientId": "CHANGE-ME",
