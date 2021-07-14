@@ -80,6 +80,6 @@ ARM_CLIENT_SECRET = clientSecret
 ARM_SUBSCRIPTION_ID = subscriptionId
 ARM_TENANT_ID = tenantId
 ```
-4. In Terraform Cloud, go to app.terraform.io/app/settings/tokens, and create a new API token. Save the token in a key called `TF_API_TOKEN`
+4. In Terraform Cloud, go to [app.terraform.io/app/settings/tokens](https://app.terraform.io/app/settings/tokens), and create a new API token. Save the token in a key called `TF_API_TOKEN`
 
 5. Change the organization and the workspace name in the root [main.tf](main.tf) for the name of yours. 
