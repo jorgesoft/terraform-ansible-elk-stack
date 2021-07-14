@@ -35,6 +35,8 @@ TODO
 
 ## GitHub Actions
 
+- On pull request to Main:
+  - Runs `terraform init, format and plan` to check if it can be deployed
 - On push to Main:
   - Runs `terraform apply -auto-approve` to a remote state in Terraform Cloud
   - Provisions ELK stack using Ansible
