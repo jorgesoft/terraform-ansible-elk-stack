@@ -48,8 +48,8 @@ resource "azurerm_linux_virtual_machine_scale_set" "mgmt_ss" {
   }
 }
 
-resource "azurerm_monitor_autoscale_setting" "mgmg_as" {
-  name                = "mgmg_as"
+resource "azurerm_monitor_autoscale_setting" "mgmg_settings" {
+  name                = "mgmg_settings"
   resource_group_name = var.rg
   location            = var.location
   target_resource_id  = azurerm_linux_virtual_machine_scale_set.mgmt_ss.id
