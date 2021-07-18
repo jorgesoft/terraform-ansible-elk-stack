@@ -79,5 +79,5 @@ jobs:
       uses: azure/powershell@v1
       with:
         inlineScript: |
-          Get-AzVM -ResourceGroupName "elk_rg"
+          Get-AzNetworkInterface | ForEach { "[{0}]" -f $_.Name; $_.IpConfigurations.PrivateIpAddress} | Out-File -FilePath .\hosts
         azPSVersion: '3.1.0'
