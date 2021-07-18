@@ -52,7 +52,7 @@ resource "azurerm_lb_rule" "kibanarule" {
 }
 
 resource "azurerm_lb_backend_address_pool" "kb_nodes" {
-  name            = "esnodes"
+  name            = "kibananodes"
   loadbalancer_id = azurerm_lb.kibana_lb.id
 }
 
@@ -87,8 +87,8 @@ resource "azurerm_virtual_machine" "main" {
 
   storage_image_reference {
     publisher = "Canonical"
-    offer     = "UbuntuServer"
-    sku       = "16.04-LTS"
+    offer     = "0001-com-ubuntu-server-focal"
+    sku       = "20_04-lts"
     version   = "latest"
   }
   storage_os_disk {
@@ -99,8 +99,8 @@ resource "azurerm_virtual_machine" "main" {
   }
   os_profile {
     computer_name  = each.value
-    admin_username = "testadmin"
-    admin_password = "Password1234!"
+    admin_username      = var.username
+    admin_password      = var.password
   }
   os_profile_linux_config {
     disable_password_authentication = false
