@@ -86,3 +86,17 @@ jobs:
       with:
         name: hosts
         path: hosts
+        
+  ansible:
+    name: Ansible deployment
+    runs-on: ubuntu-latest
+    needs: terraform
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+    - name: execute ansible playbook in mgmt VM
+      uses: appleboy/ssh-action@master
+      with:
+        host: "52.247.237.43"
+        username: "jorges"
+        password: "password1234!"
+        script: "ls /terraform-ansible-elk-stack/ansible"
