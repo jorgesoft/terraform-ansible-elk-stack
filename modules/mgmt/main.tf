@@ -20,6 +20,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "mgmt_ss" {
   admin_username      = var.username
   admin_password      = var.password
   disable_password_authentication = false
+  custom_data = filebase64("scripts/mgmt-init.sh")
 
   source_image_reference {
     publisher = "Canonical"
