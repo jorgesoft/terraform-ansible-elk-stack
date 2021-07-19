@@ -90,6 +90,8 @@ jobs:
   ansible:
     name: Ansible deployment
     runs-on: ubuntu-latest
+    needs: terraform
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     steps:
     - name: execute ansible playbook in mgmt VM
       uses: appleboy/ssh-action@master
