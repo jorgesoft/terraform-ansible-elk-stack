@@ -11,50 +11,6 @@ provider "azurerm" {
   features {}
 }
 
-resource "azurerm_lb" "elastic_lb" {
-  name                = "elastic_lb"
-  location            = var.location
-  resource_group_name = var.rg
-  sku = "Standard"
-
-  frontend_ip_configuration {
-    name      = "esipconfig"
-    subnet_id = var.subnet
-  }
-}
-
-resource "azurerm_lb_probe" "elastic_probe" {
-  resource_group_name = var.rg
-  loadbalancer_id     = azurerm_lb.elastic_lb.id
-  name                = "elastic_probe"
-  port                = 9200
-}
-
-resource "azurerm_lb_rule" "elasticrule" {
-  resource_group_name            = var.rg
-  loadbalancer_id                = azurerm_lb.elastic_lb.id
-  name                           = "elasticrule"
-  protocol                       = "Tcp"
-  frontend_port                  = 9200
-  backend_port                   = 9200
-  frontend_ip_configuration_name = "esipconfig"
-  backend_address_pool_id        = azurerm_lb_backend_address_pool.es_nodes.id
-  probe_id = azurerm_lb_probe.elastic_probe.id
-}
-
-resource "azurerm_lb_backend_address_pool" "es_nodes" {
-  name            = "esnodes"
-  loadbalancer_id = azurerm_lb.elastic_lb.id
-}
-
-resource "azurerm_lb_backend_address_pool_address" "es_ips" {
-  for_each                = toset(var.vm_names)
-  name                    = each.value
-  backend_address_pool_id = azurerm_lb_backend_address_pool.es_nodes.id
-  virtual_network_id      = var.vnet
-  ip_address              = azurerm_network_interface.es_nics[each.key].private_ip_address
-}
-
 resource "azurerm_network_interface" "es_nics" {
   for_each            = toset(var.vm_names)
   name                = each.value
