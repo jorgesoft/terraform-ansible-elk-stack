@@ -1,0 +1,6 @@
+[elastic]
+elasticmaster
+elasticnode1
+elasticnode2
+
+[kibana]
