@@ -37,7 +37,7 @@
     es_plugins:
       - plugin: ingest-attachment
 
-- hosts: elasticnode1
+- hosts: elasticnode2
   roles:
     - role: elastic.elasticsearch
   vars:
