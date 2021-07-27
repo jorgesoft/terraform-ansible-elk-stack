@@ -88,4 +88,8 @@ jobs:
         host: ${{ env.MGMT_IP }}
         username: "jorges"
         password: "password1234!"
-        script: "ls /terraform-ansible-elk-stack/ansible"
+        #script: "ls /terraform-ansible-elk-stack/ansible"
+        script: |
+          "cd /terraform-ansible-elk-stack/ansible"
+          "ansible-galaxy install elastic.elasticsearch,v7.13.3"
+          "ls /terraform-ansible-elk-stack/ansible"

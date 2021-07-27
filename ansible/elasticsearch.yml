@@ -4,12 +4,12 @@
   vars:
     es_heap_size: "1g"
     es_config:
-      cluster.name: "test-cluster"
-      cluster.initial_master_nodes: "elastic02"
-      discovery.seed_hosts: "elastic02:9300"
+      cluster.name: "terra-ansible"
+      cluster.initial_master_nodes: "elasticmaster"
+      discovery.seed_hosts: "elasticmaster:9300"
       http.host: 0.0.0.0
       http.port: 9200
-      node.data: false
+      node.data: true
       node.master: true
       transport.host: 0.0.0.0
       transport.port: 9300
@@ -24,9 +24,9 @@
     es_data_dirs:
       - "/opt/elasticsearch"
     es_config:
-      cluster.name: "test-cluster"
-      cluster.initial_master_nodes: "elastic02"
-      discovery.seed_hosts: "elastic02:9300"
+      cluster.name: "terra-ansible"
+      cluster.initial_master_nodes: "elasticmaster"
+      discovery.seed_hosts: "elasticmaster:9300"
       http.host: 0.0.0.0
       http.port: 9200
       node.data: true
@@ -42,8 +42,8 @@
     - role: elastic.elasticsearch
   vars:
     es_config:
-      cluster.name: "test-cluster"
-      discovery.seed_hosts: "elastic02:9300"
+      cluster.name: "terra-ansible"
+      discovery.seed_hosts: "elasticmaster:9300"
       http.host: 0.0.0.0
       http.port: 9200
       node.data: true
