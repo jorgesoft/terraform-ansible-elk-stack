@@ -27,7 +27,7 @@ resource "azurerm_lb" "kibana_lb" {
 
   frontend_ip_configuration {
     name      = "kbipconfig"
-    #subnet_id = var.subnet
+    subnet_id = var.subnet
     public_ip_address_id = azurerm_public_ip.kibana_ip.id
   }
 }
@@ -110,38 +110,14 @@ resource "azurerm_virtual_machine" "main" {
   }
 }
 
-resource "azurerm_network_security_group" "kibana_nsg" {
-  name                = "kibana_nsg"
-  location            = var.location
-  resource_group_name = var.rg
+resource "azurerm_lb_outbound_rule" "example" {
+  resource_group_name     = var.rg
+  loadbalancer_id         = azurerm_lb.kibana_lb.id
+  name                    = "KibanaOutbound"
+  protocol                = "Tcp"
+  backend_address_pool_id = azurerm_lb_backend_address_pool.kb_nodes.id
 
-  security_rule {
-    name                       = "kibanaIN"
-    priority                   = 100
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "Tcp"
-    source_port_range          = "5601"
-    destination_port_range     = "5601"
-    source_address_prefix      = "VirtualNetwork"
-    destination_address_prefix = "*"
-  }
-
-  security_rule {
-    name                       = "SSH"
-    priority                   = 101
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "Tcp"
-    source_port_range          = "22"
-    destination_port_range     = "22"
-    source_address_prefix      = "10.0.1.0/24"
-    destination_address_prefix = "*"
+  frontend_ip_configuration {
+    name = "kbipconfig"
   }
 }
-
-#resource "azurerm_network_interface_security_group_association" "elastic_nsg_as" {
-#  for_each              = toset(var.vm_names)
-#  network_interface_id      = each.value
-#  network_security_group_id = azurerm_network_security_group.example.id
-#}
