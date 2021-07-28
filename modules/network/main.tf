@@ -37,7 +37,7 @@ resource "azurerm_virtual_network" "elk_vnet" {
   }
 
   subnet {
-    name           = "elastic_sn"
+    name           = "logstash_sn"
     address_prefix = "10.0.4.0/24"
   }
 
