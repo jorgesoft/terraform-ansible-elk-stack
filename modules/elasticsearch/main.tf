@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     azurerm = {
-      source = "hashicorp/azurerm"
+      source  = "hashicorp/azurerm"
       version = "=2.67.0"
     }
   }
@@ -52,8 +52,8 @@ resource "azurerm_virtual_machine" "main" {
   }
   os_profile {
     computer_name  = each.value
-    admin_username      = var.username
-    admin_password      = var.password
+    admin_username = var.username
+    admin_password = var.password
   }
   os_profile_linux_config {
     disable_password_authentication = false

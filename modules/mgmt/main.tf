@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     azurerm = {
-      source = "hashicorp/azurerm"
+      source  = "hashicorp/azurerm"
       version = ">= 2.26"
     }
   }
@@ -12,15 +12,15 @@ provider "azurerm" {
 }
 
 resource "azurerm_linux_virtual_machine_scale_set" "mgmt_ss" {
-  name                = "mgmt"
-  resource_group_name = var.rg
-  location            = var.location
-  sku                 = "Standard_F2"
-  instances           = 1
-  admin_username      = var.username
-  admin_password      = var.password
+  name                            = "mgmt"
+  resource_group_name             = var.rg
+  location                        = var.location
+  sku                             = "Standard_F2"
+  instances                       = 1
+  admin_username                  = var.username
+  admin_password                  = var.password
   disable_password_authentication = false
-  custom_data = filebase64("scripts/mgmt-init.sh")
+  custom_data                     = filebase64("scripts/mgmt-init.sh")
 
   source_image_reference {
     publisher = "Canonical"
@@ -39,11 +39,11 @@ resource "azurerm_linux_virtual_machine_scale_set" "mgmt_ss" {
     primary = true
 
     ip_configuration {
-      name                                   = "mgmt_ipc"
-      primary                                = true
-      subnet_id                              = var.subnet
+      name      = "mgmt_ipc"
+      primary   = true
+      subnet_id = var.subnet
       public_ip_address {
-        name              = "mgmt_ip"
+        name = "mgmt_ip"
       }
     }
   }
