@@ -11,59 +11,6 @@ provider "azurerm" {
   features {}
 }
 
-resource "azurerm_public_ip" "kibana_ip" {
-  name                = "kibanaIP"
-  location            = var.location
-  resource_group_name = var.rg
-  sku = "Standard"
-  allocation_method   = "Static"
-}
-
-resource "azurerm_lb" "kibana_lb" {
-  name                = "kibana_lb"
-  location            = var.location
-  resource_group_name = var.rg
-  sku = "Standard"
-
-  frontend_ip_configuration {
-    name      = "kbipconfig"
-    #subnet_id = var.subnet
-    public_ip_address_id = azurerm_public_ip.kibana_ip.id
-  }
-}
-
-resource "azurerm_lb_probe" "kibana_probe" {
-  resource_group_name = var.rg
-  loadbalancer_id     = azurerm_lb.kibana_lb.id
-  name                = "kibana_probe"
-  port                = 5601
-}
-
-resource "azurerm_lb_rule" "kibanarule" {
-  resource_group_name            = var.rg
-  loadbalancer_id                = azurerm_lb.kibana_lb.id
-  name                           = "kibanarule"
-  protocol                       = "Tcp"
-  frontend_port                  = 80
-  backend_port                   = 5601
-  frontend_ip_configuration_name = "kbipconfig"
-  backend_address_pool_id        = azurerm_lb_backend_address_pool.kb_nodes.id
-  probe_id = azurerm_lb_probe.kibana_probe.id
-}
-
-resource "azurerm_lb_backend_address_pool" "kb_nodes" {
-  name            = "kibananodes"
-  loadbalancer_id = azurerm_lb.kibana_lb.id
-}
-
-resource "azurerm_lb_backend_address_pool_address" "kb_ips" {
-  for_each                = toset(var.vm_names)
-  name                    = each.value
-  backend_address_pool_id = azurerm_lb_backend_address_pool.kb_nodes.id
-  virtual_network_id      = var.vnet
-  ip_address              = azurerm_network_interface.kb_nics[each.key].private_ip_address
-}
-
 resource "azurerm_network_interface" "kb_nics" {
   for_each            = toset(var.vm_names)
   name                = each.value
@@ -77,6 +24,19 @@ resource "azurerm_network_interface" "kb_nics" {
   }
 }
 
+resource "azurerm_network_interface_backend_address_pool_association" "kibanaIP_as" {
+  for_each                = toset(var.vm_names)
+  network_interface_id    = azurerm_network_interface.kb_nics[each.key].id
+  ip_configuration_name   = each.value
+  backend_address_pool_id = azurerm_lb_backend_address_pool.kibanaPool.id
+}
+
+resource "azurerm_availability_set" "kibana_av" {
+  name                = "kibanaAV"
+  location            = var.location
+  resource_group_name = var.rg
+}
+
 resource "azurerm_virtual_machine" "main" {
   for_each              = toset(var.vm_names)
   name                  = each.value
@@ -84,6 +44,7 @@ resource "azurerm_virtual_machine" "main" {
   resource_group_name   = var.rg
   network_interface_ids = [azurerm_network_interface.kb_nics[each.key].id]
   vm_size               = "Standard_B2s"
+  availability_set_id   = azurerm_availability_set.kibana_av.id
 
   storage_image_reference {
     publisher = "Canonical"
@@ -101,6 +62,7 @@ resource "azurerm_virtual_machine" "main" {
     computer_name  = each.value
     admin_username      = var.username
     admin_password      = var.password
+    #custom_data = filebase64("scripts/nginx.sh")
   }
   os_profile_linux_config {
     disable_password_authentication = false
@@ -110,14 +72,53 @@ resource "azurerm_virtual_machine" "main" {
   }
 }
 
-resource "azurerm_lb_outbound_rule" "example" {
-  resource_group_name     = var.rg
-  loadbalancer_id         = azurerm_lb.kibana_lb.id
-  name                    = "KibanaOutbound"
-  protocol                = "Tcp"
-  backend_address_pool_id = azurerm_lb_backend_address_pool.kb_nodes.id
+resource "random_string" "fqdn" {
+ length  = 6
+ special = false
+ upper   = false
+ number  = false
+}
 
-  frontend_ip_configuration {
-    name = "kbipconfig"
-  }
+resource "azurerm_public_ip" "kibanaIP" {
+ name                         = "kibanaIP"
+ location                     = var.location
+ resource_group_name          = var.rg
+ allocation_method            = "Static"
+ domain_name_label            = random_string.fqdn.result
+}
+
+resource "azurerm_lb" "kibana_lb" {
+ name                = "kibana_lb"
+ location            = var.location
+ resource_group_name = var.rg
+
+ frontend_ip_configuration {
+   name                 = "kibanaIP"
+   public_ip_address_id = azurerm_public_ip.kibanaIP.id
+ }
+}
+
+resource "azurerm_lb_backend_address_pool" "kibanaPool" {
+ resource_group_name = var.rg
+ loadbalancer_id     = azurerm_lb.kibana_lb.id
+ name                = "kibanaPool"
+}
+
+resource "azurerm_lb_probe" "kibanaPr" {
+ resource_group_name = var.rg
+ loadbalancer_id     = azurerm_lb.kibana_lb.id
+ name                = "kibanaPr"
+ port                = 5601
+}
+
+resource "azurerm_lb_rule" "kibana_rule" {
+   resource_group_name            = var.rg
+   loadbalancer_id                = azurerm_lb.kibana_lb.id
+   name                           = "http"
+   protocol                       = "Tcp"
+   frontend_port                  = 80
+   backend_port                   = 5601
+   backend_address_pool_id        = azurerm_lb_backend_address_pool.kibanaPool.id
+   frontend_ip_configuration_name = "kibanaIP"
+   probe_id                       = azurerm_lb_probe.kibanaPr.id
 }
