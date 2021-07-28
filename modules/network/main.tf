@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     azurerm = {
-      source = "hashicorp/azurerm"
+      source  = "hashicorp/azurerm"
       version = ">= 2.26"
     }
   }
@@ -32,7 +32,7 @@ resource "azurerm_virtual_network" "elk_vnet" {
 
   subnet {
     name           = "kibana_sn"
-    address_prefix = "10.0.3.0/24"  
+    address_prefix = "10.0.3.0/24"
     #security_group = azurerm_network_security_group.kibana_nsg.id
   }
 
@@ -104,7 +104,7 @@ resource "azurerm_network_security_group" "elastic_nsg" {
     destination_port_range     = "9300"
     source_address_prefix      = "10.0.2.0/24"
     destination_address_prefix = "*"
-  }  
+  }
 
   tags = {
     environment = "Production"

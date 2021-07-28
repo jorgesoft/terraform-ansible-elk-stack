@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     azurerm = {
-      source = "hashicorp/azurerm"
+      source  = "hashicorp/azurerm"
       version = "=2.67.0"
     }
   }
@@ -60,8 +60,8 @@ resource "azurerm_virtual_machine" "main" {
   }
   os_profile {
     computer_name  = each.value
-    admin_username      = var.username
-    admin_password      = var.password
+    admin_username = var.username
+    admin_password = var.password
     #custom_data = filebase64("scripts/nginx.sh")
   }
   os_profile_linux_config {
@@ -73,52 +73,52 @@ resource "azurerm_virtual_machine" "main" {
 }
 
 resource "random_string" "fqdn" {
- length  = 6
- special = false
- upper   = false
- number  = false
+  length  = 6
+  special = false
+  upper   = false
+  number  = false
 }
 
 resource "azurerm_public_ip" "kibanaIP" {
- name                         = "kibanaIP"
- location                     = var.location
- resource_group_name          = var.rg
- allocation_method            = "Static"
- domain_name_label            = random_string.fqdn.result
+  name                = "kibanaIP"
+  location            = var.location
+  resource_group_name = var.rg
+  allocation_method   = "Static"
+  domain_name_label   = random_string.fqdn.result
 }
 
 resource "azurerm_lb" "kibana_lb" {
- name                = "kibana_lb"
- location            = var.location
- resource_group_name = var.rg
+  name                = "kibana_lb"
+  location            = var.location
+  resource_group_name = var.rg
 
- frontend_ip_configuration {
-   name                 = "kibanaIP"
-   public_ip_address_id = azurerm_public_ip.kibanaIP.id
- }
+  frontend_ip_configuration {
+    name                 = "kibanaIP"
+    public_ip_address_id = azurerm_public_ip.kibanaIP.id
+  }
 }
 
 resource "azurerm_lb_backend_address_pool" "kibanaPool" {
- resource_group_name = var.rg
- loadbalancer_id     = azurerm_lb.kibana_lb.id
- name                = "kibanaPool"
+  resource_group_name = var.rg
+  loadbalancer_id     = azurerm_lb.kibana_lb.id
+  name                = "kibanaPool"
 }
 
 resource "azurerm_lb_probe" "kibanaPr" {
- resource_group_name = var.rg
- loadbalancer_id     = azurerm_lb.kibana_lb.id
- name                = "kibanaPr"
- port                = 5601
+  resource_group_name = var.rg
+  loadbalancer_id     = azurerm_lb.kibana_lb.id
+  name                = "kibanaPr"
+  port                = 5601
 }
 
 resource "azurerm_lb_rule" "kibana_rule" {
-   resource_group_name            = var.rg
-   loadbalancer_id                = azurerm_lb.kibana_lb.id
-   name                           = "http"
-   protocol                       = "Tcp"
-   frontend_port                  = 80
-   backend_port                   = 5601
-   backend_address_pool_id        = azurerm_lb_backend_address_pool.kibanaPool.id
-   frontend_ip_configuration_name = "kibanaIP"
-   probe_id                       = azurerm_lb_probe.kibanaPr.id
+  resource_group_name            = var.rg
+  loadbalancer_id                = azurerm_lb.kibana_lb.id
+  name                           = "http"
+  protocol                       = "Tcp"
+  frontend_port                  = 80
+  backend_port                   = 5601
+  backend_address_pool_id        = azurerm_lb_backend_address_pool.kibanaPool.id
+  frontend_ip_configuration_name = "kibanaIP"
+  probe_id                       = azurerm_lb_probe.kibanaPr.id
 }
