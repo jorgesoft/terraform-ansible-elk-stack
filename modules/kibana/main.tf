@@ -27,7 +27,7 @@ resource "azurerm_lb" "kibana_lb" {
 
   frontend_ip_configuration {
     name      = "kbipconfig"
-    subnet_id = var.subnet
+    #subnet_id = var.subnet
     public_ip_address_id = azurerm_public_ip.kibana_ip.id
   }
 }
