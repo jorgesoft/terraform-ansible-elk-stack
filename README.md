@@ -84,4 +84,6 @@ ARM_TENANT_ID = tenantId
 ```
 4. In Terraform Cloud, go to [app.terraform.io/app/settings/tokens](https://app.terraform.io/app/settings/tokens), and create a new API token. Save the token in a key called `TF_API_TOKEN`
 
-5. Change the organization and the workspace name in the root [main.tf](main.tf) for the name of yours. 
+5. Create a secret called `MASTER_KEY` and save the password for VM user (jorgesoft).
+
+6. Change the organization and the workspace name in the root [main.tf](main.tf) for the name of yours. 

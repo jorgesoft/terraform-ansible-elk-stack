@@ -1,7 +1,7 @@
 variable "username" {
   description = "Global Username"
   type        = string
-  default     = "jorges"
+  default     = "jorgesoft"
 }
 
 variable "password" {
