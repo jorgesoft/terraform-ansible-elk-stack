@@ -28,6 +28,13 @@ module "network" {
   location = azurerm_resource_group.elk_rg.location
 }
 
+module "vault" {
+  source   = "./modules/vault"
+  rg       = azurerm_resource_group.elk_rg.name
+  location = azurerm_resource_group.elk_rg.location
+  password = var.password
+}
+
 module "mgmt" {
   source   = "./modules/mgmt"
   rg       = azurerm_resource_group.elk_rg.name
