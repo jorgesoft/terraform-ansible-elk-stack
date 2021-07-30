@@ -84,13 +84,13 @@ jobs:
           echo "MGMT_IP=$ip" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
         azPSVersion: '3.1.0'
 
-    - name: execute ansible playbook in mgmt VM
+    - name: Execute Ansible playbooks in MGMT VM
       uses: appleboy/ssh-action@master
       with:
         host: ${{ env.MGMT_IP }}
         username: "jorgesoft"
         password: ${{ secrets.MASTER_KEY }}
-        #script: "ls /terraform-ansible-elk-stack/ansible"
+        command_timeout: 20m
         script: |
           cd /terraform-ansible-elk-stack/ansible
           ansible-galaxy install elastic.elasticsearch,v7.13.3
