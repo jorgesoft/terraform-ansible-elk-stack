@@ -16,6 +16,9 @@
       bootstrap.memory_lock: false
     es_plugins:
      - plugin: ingest-attachment
+    es_api_basic_auth_username: elastic
+    es_api_basic_auth_password: {{ ansible_ssh_pass }}
+    es_xpack_trial: true
 
 - hosts: elasticnode1
   roles:
@@ -36,6 +39,9 @@
       bootstrap.memory_lock: false
     es_plugins:
       - plugin: ingest-attachment
+    es_api_basic_auth_username: elastic
+    es_api_basic_auth_password: {{ ansible_ssh_pass }}
+    es_xpack_trial: true
 
 - hosts: elasticnode2
   roles:
@@ -53,3 +59,6 @@
       bootstrap.memory_lock: false
     es_plugins:
       - plugin: ingest-attachment
+    es_api_basic_auth_username: elastic
+    es_api_basic_auth_password: {{ ansible_ssh_pass }}
+    es_xpack_trial: true
