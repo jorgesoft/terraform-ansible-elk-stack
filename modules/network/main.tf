@@ -21,13 +21,13 @@ resource "azurerm_virtual_network" "elk_vnet" {
   subnet {
     name           = "mgmt_sn"
     address_prefix = "10.0.1.0/24"
-    security_group = azurerm_network_security_group.mgmt_nsg.id
+    #security_group = azurerm_network_security_group.mgmt_nsg.id
   }
 
   subnet {
     name           = "elastic_sn"
     address_prefix = "10.0.2.0/24"
-    security_group = azurerm_network_security_group.elastic_nsg.id
+    #security_group = azurerm_network_security_group.elastic_nsg.id
   }
 
   subnet {
