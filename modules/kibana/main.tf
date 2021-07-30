@@ -121,4 +121,6 @@ resource "azurerm_lb_rule" "kibana_rule" {
   backend_address_pool_id        = azurerm_lb_backend_address_pool.kibanaPool.id
   frontend_ip_configuration_name = "kibanaIP"
   probe_id                       = azurerm_lb_probe.kibanaPr.id
+  load_distribution              = SourceIPProtocol
+  idle_timeout_in_minutes        = 30
 }
