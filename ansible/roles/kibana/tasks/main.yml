@@ -38,6 +38,18 @@
    destfile: /etc/kibana/kibana.yml
    regexp: 'elasticsearch.hosts:'
    line: 'elasticsearch.hosts: [ "http://elasticmaster:9200", "http://elasticnode1:9200", "http://elasticnode2:9200" ]'
+
+- name: Defining Elasticsearch username
+  lineinfile:
+   destfile: /etc/kibana/kibana.yml
+   regexp: 'elasticsearch.username:'
+   line: 'elasticsearch.username: elastic'
+
+- name: Defining Elasticsearch password
+  lineinfile:
+   destfile: /etc/kibana/kibana.yml
+   regexp: 'elasticsearch.password:'
+   line: 'elasticsearch.password: {{ ansible_ssh_pass }}'
    
 # Starting Kibana
 

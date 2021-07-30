@@ -1,7 +1,7 @@
 [elastic]
 elasticmaster #ansible_host=192.168.122.233
 elasticnode1 #ansible_host=192.168.122.236
-#elasticnode2
+elasticnode2
 
 [kibana]
 kibana1 #ansible_host=192.168.122.237
