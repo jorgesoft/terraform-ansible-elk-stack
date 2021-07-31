@@ -8,7 +8,6 @@ Terraform deploys the following modules within a single resource group:
 
 - Elasticsearch: 
   - 3 VMs (one master and 2 nodes) Standard_B2s
-  - 1 Load Balancer
 - Kibana
   - 2 VMs for redundancy, Standard_B2s
   - 1 Load Balancer
@@ -27,11 +26,13 @@ Future releases planned modules:
 - Index push from GitHub and Ansible to show state of the configuration
 - Separate VMs using Availability Zones
 
-**WARNING:** The estimated price of this configuration is X monthly
+**WARNING:** The estimated price of this configuration is TODO monthly
 
 ## Ansible
 
-TODO
+- Configure Elasticsearch nodes using [ansible-elasticsearch](https://github.com/elastic/ansible-elasticsearch) roles
+- Configure Kibana and Logstash with custom roles
+- Installas Metricbeats and Logbeats on all VMs
 
 ## GitHub Actions
 
