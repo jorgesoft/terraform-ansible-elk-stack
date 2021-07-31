@@ -62,3 +62,43 @@
     es_api_basic_auth_username: elastic
     es_api_basic_auth_password: "{{ ansible_ssh_pass }}"
     es_xpack_trial: true
+
+- hosts: elastic
+  roles:
+    - role: elastic.beats
+  vars:
+    beats_version: 7.13.4
+    beat: metricbeat
+    beat_conf:
+      metricbeat.config.modules:
+          path: '${path.config}/modules.d/*.yml'
+          reload.enabled: false
+      setup.template.settings:
+        index.number_of_shards: 1
+        index.codec: best_compression
+      processors:
+        - add_host_metadata: ~
+    output_conf:
+      elasticsearch:
+        hosts: ['localhost:9200']
+        username: "elastic"
+        password: "{{ ansible_ssh_pass }}"
+
+- hosts: elastic
+  roles:
+    - role: elastic.beats
+  vars:
+    beats_version: 7.13.4
+    beat: filebeat
+    beat_conf:
+      filebeat:
+        inputs:
+          - type: log
+            enabled: true
+            paths:
+              - /var/log/*.log
+    output_conf:
+      elasticsearch:
+        hosts: ['localhost:9200']
+        username: "elastic"
+        password: "{{ ansible_ssh_pass }}"

@@ -9,3 +9,43 @@
 
   roles:
     - kibana
+
+- hosts: kibana
+  roles:
+    - role: elastic.beats
+  vars:
+    beats_version: 7.13.4
+    beat: metricbeat
+    beat_conf:
+      metricbeat.config.modules:
+          path: '${path.config}/modules.d/*.yml'
+          reload.enabled: false
+      setup.template.settings:
+        index.number_of_shards: 1
+        index.codec: best_compression
+      processors:
+        - add_host_metadata: ~
+    output_conf:
+      elasticsearch:
+        hosts: [ "http://elasticmaster:9200", "http://elasticnode1:9200", "http://elasticnode2:9200" ]
+        username: "elastic"
+        password: "{{ ansible_ssh_pass }}"
+
+- hosts: kibana
+  roles:
+    - role: elastic.beats
+  vars:
+    beats_version: 7.13.4
+    beat: filebeat
+    beat_conf:
+      filebeat:
+        inputs:
+          - type: log
+            enabled: true
+            paths:
+              - /var/log/*.log
+    output_conf:
+      elasticsearch:
+        hosts: [ "http://elasticmaster:9200", "http://elasticnode1:9200", "http://elasticnode2:9200" ]
+        username: "elastic"
+        password: "{{ ansible_ssh_pass }}"
