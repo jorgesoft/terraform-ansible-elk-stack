@@ -30,7 +30,7 @@
   lineinfile:
    destfile: /etc/logstash/conf.d/beats.conf
    regexp: '    password => CHANGEME'
-   line: '    password => {{ ansible_ssh_pass }}'
+   line: '    password => "{{ ansible_ssh_pass }}"'
    
 # Starting Logstash
 
