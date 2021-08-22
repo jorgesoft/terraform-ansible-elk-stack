@@ -93,8 +93,8 @@ jobs:
         command_timeout: 20m
         script: |
           cd /terraform-ansible-elk-stack/ansible
-          ansible-galaxy install elastic.elasticsearch,v7.13.3
-          ansible-galaxy install elastic.beats,v7.13.4
+          ansible-galaxy install elastic.elasticsearch
+          ansible-galaxy install elastic.beats
           ansible-playbook -i hosts ./elasticsearch.yml -e "ansible_user=jorgesoft ansible_ssh_pass=${{ secrets.MASTER_KEY }} ansible_sudo_pass=${{ secrets.MASTER_KEY }}"
           ansible-playbook -i hosts ./site.yml -e "ansible_user=jorgesoft ansible_ssh_pass=${{ secrets.MASTER_KEY }} ansible_sudo_pass=${{ secrets.MASTER_KEY }}"
 
