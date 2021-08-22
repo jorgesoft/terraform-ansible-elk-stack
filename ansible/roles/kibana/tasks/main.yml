@@ -16,7 +16,7 @@
 
 - name: Install Kibana with apt
   apt:
-   name: kibana
+   name: kibana=7.14.0
    update_cache: yes
  
 # Configurations
