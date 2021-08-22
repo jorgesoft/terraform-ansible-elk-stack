@@ -63,3 +63,13 @@ module "kibana" {
   username = var.username
   vnet     = module.network.elk_vnet_id
 }
+
+module "nsgs" {
+  source             = "./modules/nsgs"
+  rg                 = azurerm_resource_group.elk_rg.name
+  location           = azurerm_resource_group.elk_rg.location
+  mgmt_subnet        = module.network.elk_subnets[0]
+  elastic_subnet     = module.network.elk_subnets[1]
+  kibana_subnet      = module.network.elk_subnets[2]
+  logstash_subnet    = module.network.elk_subnets[3]
+}
