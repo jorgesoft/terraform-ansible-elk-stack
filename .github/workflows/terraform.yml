@@ -102,5 +102,8 @@ jobs:
       uses: azure/powershell@v1
       with:
         inlineScript: |
-          (Get-AzPublicIpAddress -ResourceGroupName elk_rg -Name kibanaIP).IpAddress 
+          Write-Host: "Kibana:"
+          (Get-AzPublicIpAddress -ResourceGroupName elk_rg -Name kibanaIP).dnsSettings.fqdn
+          Write-Host: "Logstash:"
+          (Get-AzPublicIpAddress -ResourceGroupName elk_rg -Name logstashIP).dnsSettings.fqdn
         azPSVersion: '3.1.0'
