@@ -130,3 +130,43 @@ resource "azurerm_subnet_network_security_group_association" "kibana_nsg_subnet"
   subnet_id                 = var.kibana_subnet
   network_security_group_id = azurerm_network_security_group.kibana_nsg.id
 }
+
+# Logstash NSG
+resource "azurerm_network_security_group" "logstash_nsg" {
+  name                = "logstash_nsg"
+  location            = var.location
+  resource_group_name = var.rg
+
+  security_rule {
+    name                       = "SSH"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "22"
+    source_address_prefix      = "10.0.1.0/24"
+    destination_address_prefix = "*"
+  }
+
+  security_rule {
+    name                       = "Beats"
+    priority                   = 101
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "5044"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  tags = {
+    environment = "Production"
+  }
+}
+
+resource "azurerm_subnet_network_security_group_association" "logstash_nsg_subnet" {
+  subnet_id                 = var.logstash_subnet
+  network_security_group_id = azurerm_network_security_group.logstash_nsg.id
+}
