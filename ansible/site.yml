@@ -18,11 +18,11 @@
   roles:
     - logstash
 
-- hosts: kibana, logstash
+- hosts: kibana, logstash, elastic
   roles:
     - role: elastic.beats
   vars:
-    beats_version: 7.13.4
+    beats_version: 7.14.0
     beat: metricbeat
     beat_conf:
       metricbeat.config.modules:
@@ -39,11 +39,11 @@
         username: "elastic"
         password: "{{ ansible_ssh_pass }}"
 
-- hosts: kibana, logstash
+- hosts: kibana, logstash, elastic
   roles:
     - role: elastic.beats
   vars:
-    beats_version: 7.13.4
+    beats_version: 7.14.0
     beat: filebeat
     beat_conf:
       filebeat:
