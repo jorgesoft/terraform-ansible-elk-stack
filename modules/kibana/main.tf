@@ -99,7 +99,6 @@ resource "azurerm_lb" "kibana_lb" {
 }
 
 resource "azurerm_lb_backend_address_pool" "kibanaPool" {
-  resource_group_name = var.rg
   loadbalancer_id     = azurerm_lb.kibana_lb.id
   name                = "kibanaPool"
 }
