@@ -16,7 +16,7 @@
 
 - name: Install Logstash with apt
   apt:
-   name: logstash=7.14.0
+   name: logstash=1:7.14.0-1
    update_cache: yes
  
 # Configurations
