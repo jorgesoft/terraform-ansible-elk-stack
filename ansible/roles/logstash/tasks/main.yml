@@ -1,0 +1,40 @@
+# Add Elasticsearch apt key
+
+- name: Add Elastic apt key
+  apt_key:
+   url: "https://packages.elastic.co/GPG-KEY-elasticsearch"
+   state: present
+
+# Add the Elasticsearch apt repo. For versions 6 of the stack - use '6.x-prerelease':
+
+- name: Adding Elastic repo
+  apt_repository:
+   repo: deb https://artifacts.elastic.co/packages/7.x/apt stable main
+   state: present
+
+# Install Logstash
+
+- name: Install Logstash with apt
+  apt:
+   name: logstash=7.14.0
+   update_cache: yes
+ 
+# Configurations
+
+- name: Copy beats.conf pipeline
+  copy:
+    src: ./roles/logstash/resource/beats.conf
+    dest: /etc/logstash/conf.d/beats.conf
+
+- name: Updating the config file with Elastic password
+  lineinfile:
+   destfile: /etc/logstash/conf.d/beats.conf
+   regexp: '    password => CHANGEME'
+   line: '    password => {{ ansible_ssh_pass }}'
+   
+# Starting Logstash
+
+- name: Starting Logstash
+  service:
+   name: logstash
+   state: started

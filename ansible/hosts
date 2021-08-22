@@ -6,3 +6,7 @@ elasticnode2
 [kibana]
 kibana1 #ansible_host=192.168.122.237
 kibana2 
+
+[logstash]
+logstash1
+logstash2

@@ -10,7 +10,15 @@
   roles:
     - kibana
 
-- hosts: kibana
+- name: Configure Logstash
+  hosts: logstash
+  #remote_user: root
+  become: yes
+
+  roles:
+    - logstash
+
+- hosts: kibana, logstash
   roles:
     - role: elastic.beats
   vars:
@@ -31,7 +39,7 @@
         username: "elastic"
         password: "{{ ansible_ssh_pass }}"
 
-- hosts: kibana
+- hosts: kibana, logstash
   roles:
     - role: elastic.beats
   vars:
