@@ -29,6 +29,18 @@ resource "azurerm_network_security_group" "mgmt_nsg" {
     destination_address_prefix = "*"
   }
 
+  security_rule {
+    name                       = "Private"
+    priority                   = 200
+    direction                  = "Inbound"
+    access                     = "Deny"
+    protocol                   = "*"
+    source_port_range          = "*"
+    destination_port_range     = "*"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
   tags = {
     environment = "Production"
   }
@@ -81,6 +93,18 @@ resource "azurerm_network_security_group" "elastic_nsg" {
     destination_address_prefix = "*"
   }
 
+  security_rule {
+    name                       = "Private"
+    priority                   = 200
+    direction                  = "Inbound"
+    access                     = "Deny"
+    protocol                   = "*"
+    source_port_range          = "*"
+    destination_port_range     = "*"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
   tags = {
     environment = "Production"
   }
@@ -121,6 +145,18 @@ resource "azurerm_network_security_group" "kibana_nsg" {
     destination_address_prefix = "*"
   }
 
+  security_rule {
+    name                       = "Private"
+    priority                   = 200
+    direction                  = "Inbound"
+    access                     = "Deny"
+    protocol                   = "*"
+    source_port_range          = "*"
+    destination_port_range     = "*"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
   tags = {
     environment = "Production"
   }
@@ -157,6 +193,18 @@ resource "azurerm_network_security_group" "logstash_nsg" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "5044"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  security_rule {
+    name                       = "Private"
+    priority                   = 200
+    direction                  = "Inbound"
+    access                     = "Deny"
+    protocol                   = "*"
+    source_port_range          = "*"
+    destination_port_range     = "*"
     source_address_prefix      = "*"
     destination_address_prefix = "*"
   }
